@@ -11,6 +11,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,9 +20,12 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.rafaelmeyer.mycustomcamerafinal.R;
 import com.example.rafaelmeyer.mycustomcamerafinal.controller.CameraController;
+import com.example.rafaelmeyer.mycustomcamerafinal.controller.MainActivityController;
 
 import java.io.IOException;
 
@@ -34,9 +39,12 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
     private AppCompatActivity activity;
 
+    private ImageButton imageButtonGalleryFragment;
+
     private Camera myCamera;
     private SurfaceView mySurfaceView;
     private SurfaceHolder mySurfaceHolder;
+
 
     private Fragment fragment = new Fragment();
     private boolean previewing = false;
@@ -74,9 +82,20 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
         activity = (AppCompatActivity) this.getActivity();
         fragment = this;
 
+        imageButtonGalleryFragment = (ImageButton) view.findViewById(R.id.imageButtonGalleryFragment);
+
         myFAPTakePicture = (FloatingActionButton) view.findViewById(R.id.fapTakePicture);
         myFAPCancelPicture = (FloatingActionButton) view.findViewById(R.id.fapCancelPicture);
         myFAPAddPicture = (FloatingActionButton) view.findViewById(R.id.fapAddPicture);
+
+        imageButtonGalleryFragment.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cameraController.startGalleryFragmentFromCameraFragment(activity);
+                    }
+                }
+        );
 
         myFAPTakePicture.setOnClickListener(
                 new View.OnClickListener() {
@@ -161,6 +180,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
                             myFAPCancelPicture.setVisibility(View.INVISIBLE);
                             myFAPTakePicture.setVisibility(View.VISIBLE);
                             myCamera.startPreview();
+                            Toast.makeText(getActivity(), "Photo taked", Toast.LENGTH_SHORT).show();
                         }
                     }
             );

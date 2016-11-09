@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar
     android:id="@+id/toolbarMain"
-    android:visibility="visible"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?attr/actionBarSize"
@@ -12,16 +11,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <ImageButton
-            android:id="@+id/imageButtonCameraFragment"
-            android:src="@drawable/ic_camera_enhance_black_24dp"
-            android:tint="@color/colorWhite"
-            android:background="@color/colorTransparent"
-            android:visibility="invisible"
-            android:layout_alignParentRight="true"
-            android:layout_width="32dp"
-            android:layout_height="32dp" />
 
         <ImageButton
             android:id="@+id/imageButtonGalleryFragment"

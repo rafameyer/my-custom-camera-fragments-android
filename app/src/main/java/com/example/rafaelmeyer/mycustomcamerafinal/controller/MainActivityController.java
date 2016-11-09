@@ -39,6 +39,7 @@ public class MainActivityController  {
                 myFragmentCamera = null;
             }
             myFragmentGallery = new GalleryFragment();
+
             fragment.getSupportFragmentManager().beginTransaction()
                     .add(R.id.contentGallery, myFragmentGallery)
                     .commit();

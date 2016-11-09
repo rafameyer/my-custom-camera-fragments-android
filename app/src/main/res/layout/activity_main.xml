@@ -3,21 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MainActivity">
-
-    <include layout="@layout/toolbar_main"/>
-
-    <include layout="@layout/toolbar_selected"/>
+    tools:context=".view.Activity.MainActivity">
 
     <FrameLayout
-        android:layout_below="@+id/toolbarMain"
         android:id="@+id/contentCamera"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </FrameLayout>
 
     <FrameLayout
-        android:layout_below="@+id/toolbarMain"
         android:id="@+id/contentGallery"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

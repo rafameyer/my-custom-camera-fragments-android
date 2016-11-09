@@ -1,5 +1,6 @@
 package com.example.rafaelmeyer.mycustomcamerafinal.view.adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -31,6 +32,10 @@ public class MyPhotoAdapter extends RecyclerView.Adapter<MyPhotoAdapter.ViewHold
     private OnPassSelected myOnPassSelected;
     private OnPassFirstSelected myOnPassFirstSelected;
 
+    public MyPhotoAdapter() {
+
+    }
+
     public int getCountSelected() {
         return countSelected;
     }
@@ -59,6 +64,15 @@ public class MyPhotoAdapter extends RecyclerView.Adapter<MyPhotoAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         File imageFile = new File(getImagesFile().listFiles()[position].toURI());
         Picasso.with(holder.itemView.getContext()).load(imageFile).resize(250,250).centerCrop().into(holder.imageViewItem);
+
+        if (itemList.get(position).getSelected()) {
+            holder.cardViewItem.setBackgroundColor(Color.BLUE);
+            holder.imageViewItemSelected.setVisibility(View.VISIBLE);
+        } else {
+            holder.cardViewItem.setBackgroundColor(Color.WHITE);
+            holder.imageViewItemSelected.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     @Override
@@ -116,10 +130,9 @@ public class MyPhotoAdapter extends RecyclerView.Adapter<MyPhotoAdapter.ViewHold
         @Override
         public boolean onLongClick(View v) {
             if (!isFirst && countSelected == 0) {
-                Log.d(TAG, "onLongClick: " + countSelected );
                 countSelected++;
                 isFirst = true;
-                itemList.get(getPosition()).setSelected(true);
+                itemList.get(getAdapterPosition()).setSelected(true);
                 if (myOnPassFirstSelected != null) {
                     myOnPassFirstSelected.onPassFirstSelected(isFirst, countSelected);
                 }
@@ -145,6 +158,5 @@ public class MyPhotoAdapter extends RecyclerView.Adapter<MyPhotoAdapter.ViewHold
     public void setMyOnPassFirstSelected(OnPassFirstSelected myOnPassFirstSelected) {
         this.myOnPassFirstSelected = myOnPassFirstSelected;
     }
-
 
 }

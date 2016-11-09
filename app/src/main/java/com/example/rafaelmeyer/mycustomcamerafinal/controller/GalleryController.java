@@ -1,7 +1,13 @@
 package com.example.rafaelmeyer.mycustomcamerafinal.controller;
 
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+
+import com.example.rafaelmeyer.mycustomcamerafinal.R;
 import com.example.rafaelmeyer.mycustomcamerafinal.model.Item;
 import com.example.rafaelmeyer.mycustomcamerafinal.view.adapter.MyPhotoAdapter;
+import com.example.rafaelmeyer.mycustomcamerafinal.view.fragment.CameraFragment;
+import com.example.rafaelmeyer.mycustomcamerafinal.view.fragment.GalleryFragment;
 
 import java.io.File;
 import java.util.List;
@@ -11,7 +17,19 @@ import java.util.List;
  */
 public class GalleryController {
 
+    private Fragment myCameraFragment;
     private MyPhotoAdapter myPhotoAdapter;
+
+    public void startCameraFragmentFromGalleryFragment(AppCompatActivity activity, Fragment fragment) {
+        myCameraFragment = new CameraFragment();
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.contentCamera, myCameraFragment)
+                .commit();
+
+        activity.getSupportFragmentManager().beginTransaction()
+                .remove(fragment)
+                .commit();
+    }
 
     public void removeItemSelected(int length, List<Item> itemList) {
         for (int i = length - 1; i >= 0; i--) {

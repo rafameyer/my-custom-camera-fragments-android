@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.rafaelmeyer.mycustomcamerafinal.R;
-import com.example.rafaelmeyer.mycustomcamerafinal.view.fragment.CameraFragment;
 import com.example.rafaelmeyer.mycustomcamerafinal.view.fragment.GalleryFragment;
 
 import java.io.File;
@@ -20,6 +19,19 @@ import java.util.Date;
  * Created by rafael.meyer on 11/4/16.
  */
 public class CameraController {
+
+    private Fragment myFragmentGallery;
+
+    public void startGalleryFragmentFromCameraFragment(AppCompatActivity activity) {
+
+        if (myFragmentGallery == null) {
+            myFragmentGallery = new GalleryFragment();
+        }
+
+        activity.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.contentCamera, myFragmentGallery)
+                .commit();
+    }
 
     public void addNewPhoto(Activity fragment, Bitmap bitmap) {
         File photoFile = null;

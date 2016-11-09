@@ -18,7 +18,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.example.android.fileprovider"
+            android:authorities="${applicationId}.contentprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -26,7 +26,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".view.MainActivity">
+        <activity android:name=".view.Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
