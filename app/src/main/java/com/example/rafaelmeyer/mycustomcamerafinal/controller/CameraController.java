@@ -29,6 +29,7 @@ public class CameraController {
         }
 
         activity.getSupportFragmentManager().beginTransaction()
+                .addToBackStack("GalleryFragment")
                 .replace(R.id.contentCamera, myFragmentGallery)
                 .commit();
     }

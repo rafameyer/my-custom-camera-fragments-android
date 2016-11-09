@@ -1,24 +1,23 @@
 package com.example.rafaelmeyer.mycustomcamerafinal.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.rafaelmeyer.mycustomcamerafinal.R;
 import com.example.rafaelmeyer.mycustomcamerafinal.controller.GalleryController;
 import com.example.rafaelmeyer.mycustomcamerafinal.model.Item;
-import com.example.rafaelmeyer.mycustomcamerafinal.view.Activity.MainActivity;
 import com.example.rafaelmeyer.mycustomcamerafinal.view.adapter.MyPhotoAdapter;
 
 import java.io.File;
@@ -28,7 +27,8 @@ import java.util.List;
 /**
  * Created by rafael.meyer on 11/4/16.
  */
-public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFirstSelected, MyPhotoAdapter.OnPassSelected {
+
+public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFirstSelected, MyPhotoAdapter.OnPassSelected, FragmentManager.OnBackStackChangedListener {
 
     private static final String TAG = "Gallery Fragment";
     private GalleryController galleryController = new GalleryController();
@@ -44,11 +44,27 @@ public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFi
 
     private RecyclerView.LayoutManager mLayoutManager;
 
+    private FragmentManager myFragmentManager;
+
+    private TextView textViewNoHaveItem;
+    private TextView textViewTitleToolbar;
+    private ImageView imageViewDeleteToolbar;
     private ImageView imageViewBackArrowToolbar;
+    private ImageView imageViewUnselectedToolbar;
 
     public int countSelected;
     public Boolean isFirstActivity = false;
     public List<Item> itemList = new ArrayList<>();
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,7 +76,13 @@ public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_gallery, container, false);
 
+        textViewNoHaveItem = (TextView) view.findViewById(R.id.textViewNoHaveItem);
+        textViewTitleToolbar = (TextView) view.findViewById(R.id.textViewTitleToolbar);
+        imageViewDeleteToolbar = (ImageView) view.findViewById(R.id.imageViewDeleteToolbar);
         imageViewBackArrowToolbar = (ImageView) view.findViewById(R.id.imageViewBackArrowToolbar);
+        imageViewUnselectedToolbar = (ImageView) view.findViewById(R.id.imageViewUnselectedToolbar);
+
+        textViewTitleToolbar.setText("Gallery");
 
         activity = (AppCompatActivity) this.getActivity();
         fragment = this;
@@ -70,6 +92,24 @@ public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFi
                     @Override
                     public void onClick(View v) {
                         galleryController.startCameraFragmentFromGalleryFragment(activity, fragment);
+                    }
+                }
+        );
+
+        imageViewUnselectedToolbar.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        removeItemSelected();
+                    }
+                }
+        );
+
+        imageViewDeleteToolbar.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteAllItemsSelected();
                     }
                 }
         );
@@ -93,6 +133,14 @@ public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFi
             Item item = new Item(file, false);
             itemList.add(item);
         }
+
+        if (itemList.size() == 0) {
+            textViewNoHaveItem.setVisibility(View.VISIBLE);
+        } else {
+            textViewNoHaveItem.setVisibility(View.INVISIBLE);
+        }
+
+
     }
 
     private void initializationRecyclerView(View v) {
@@ -109,23 +157,93 @@ public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFi
 
     private void removeItemSelected() {
         galleryController.removeItemSelected(mGalleryFolder.listFiles().length, itemList);
+        countSelected = 0;
+        mAdapter.isFirst = false;
+        mAdapter.notifyDataSetChanged();
+        imageViewUnselectedToolbar.setVisibility(View.INVISIBLE);
+        imageViewDeleteToolbar.setVisibility(View.INVISIBLE);
+        textViewTitleToolbar.setText("Gallery");
     }
 
     private void deleteAllItemsSelected() {
         galleryController.deleteAllItemSelected(mGalleryFolder.listFiles(), itemList);
+        mAdapter.notifyDataSetChanged();
+        mAdapter.isFirst = false;
+        textViewTitleToolbar.setText("Gallery");
+        imageViewDeleteToolbar.setVisibility(View.INVISIBLE);
+        imageViewUnselectedToolbar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onPassFirstSelected(Boolean isFirst, int count) {
         Log.d(TAG, "onPassFirstSelected: ");
-        if (isFirst) {
+        isFirstActivity = isFirst;
+        countSelected = count;
 
+        if (count == 0) {
+            textViewTitleToolbar.setText("Gallery");
         }
+        if (count > 0) {
+            textViewTitleToolbar.setText(countSelected + " Selected");
+        }
+
+        if (isFirstActivity) {
+            imageViewDeleteToolbar.setVisibility(View.VISIBLE);
+            imageViewUnselectedToolbar.setVisibility(View.VISIBLE);
+        } else if (countSelected == 0) {
+            imageViewDeleteToolbar.setVisibility(View.INVISIBLE);
+            imageViewUnselectedToolbar.setVisibility(View.INVISIBLE);
+        }
+
+        if (itemList.size() == 0) {
+            textViewNoHaveItem.setVisibility(View.VISIBLE);
+        } else {
+            textViewNoHaveItem.setVisibility(View.INVISIBLE);
+        }
+
+        super.onResume();
     }
 
     @Override
     public void onPassSelected(View v, File imageModel, Boolean isFirst, int count) {
+        isFirstActivity = isFirst;
+        countSelected = count;
 
+        if (count == 0) {
+            textViewTitleToolbar.setText("Gallery");
+            imageViewDeleteToolbar.setVisibility(View.INVISIBLE);
+            imageViewUnselectedToolbar.setVisibility(View.INVISIBLE);
+        }
+        if (count > 0){
+            textViewTitleToolbar.setText(countSelected + " Selected");
+        }
+
+        if (!isFirst && count == 0) {
+            //galleryCamera.startPhotoFragmentFromGalleryFragment(...);
+        }
+
+        if (isFirstActivity) {
+            imageViewDeleteToolbar.setVisibility(View.VISIBLE);
+            imageViewUnselectedToolbar.setVisibility(View.VISIBLE);
+        } else if (countSelected == 0) {
+            imageViewDeleteToolbar.setVisibility(View.INVISIBLE);
+            imageViewUnselectedToolbar.setVisibility(View.INVISIBLE);
+        }
+
+        if (itemList.size() == 0) {
+            textViewNoHaveItem.setVisibility(View.VISIBLE);
+        } else {
+            textViewNoHaveItem.setVisibility(View.INVISIBLE);
+        }
+
+
+
+        super.onResume();
     }
 
+    @Override
+    public void onBackStackChanged() {
+        // Its not working!!!!
+        getActivity().getSupportFragmentManager().popBackStack();
+    }
 }

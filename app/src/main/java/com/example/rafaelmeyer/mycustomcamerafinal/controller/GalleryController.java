@@ -1,7 +1,10 @@
 package com.example.rafaelmeyer.mycustomcamerafinal.controller;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
+import android.view.View;
 
 import com.example.rafaelmeyer.mycustomcamerafinal.R;
 import com.example.rafaelmeyer.mycustomcamerafinal.model.Item;
@@ -18,7 +21,7 @@ import java.util.List;
 public class GalleryController {
 
     private Fragment myCameraFragment;
-    private MyPhotoAdapter myPhotoAdapter;
+    private MyPhotoAdapter myPhotoAdapter = new MyPhotoAdapter();
 
     public void startCameraFragmentFromGalleryFragment(AppCompatActivity activity, Fragment fragment) {
         myCameraFragment = new CameraFragment();
@@ -51,4 +54,5 @@ public class GalleryController {
             }
         }
     }
+
 }
