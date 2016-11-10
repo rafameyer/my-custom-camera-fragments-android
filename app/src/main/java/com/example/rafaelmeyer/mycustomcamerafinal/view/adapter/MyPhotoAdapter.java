@@ -105,26 +105,26 @@ public class MyPhotoAdapter extends RecyclerView.Adapter<MyPhotoAdapter.ViewHold
                     itemList.get(getAdapterPosition()).setSelected(true);
                     countSelected++;
                     if (myOnPassSelected != null) {
-                        myOnPassSelected.onPassSelected(v, getImagesFile().listFiles()[getAdapterPosition()], isFirst, countSelected);
+                        myOnPassSelected.onPassSelected(v, getImagesFile().listFiles()[getAdapterPosition()], isFirst, countSelected, itemView.findViewById(R.id.imageViewItem));
                     }
                 } else {
                     if (countSelected > 0) {
                         itemList.get(getAdapterPosition()).setSelected(false);
                         countSelected--;
                     }
-                    if (myOnPassSelected != null) {
-                        myOnPassSelected.onPassSelected(v, getImagesFile().listFiles()[getAdapterPosition()], isFirst, countSelected);
-                    }
                     if (countSelected == 0) {
+                        if (myOnPassSelected != null) {
+                            myOnPassSelected.onPassSelected(v, getImagesFile().listFiles()[getAdapterPosition()], isFirst, countSelected, itemView.findViewById(R.id.imageViewItem));
+                        }
                         isFirst = false;
                     }
                 }
-                notifyDataSetChanged();
             } else {
                 if (myOnPassSelected != null) {
-                    myOnPassSelected.onPassSelected(v, getImagesFile().listFiles()[getAdapterPosition()], isFirst, countSelected);
+                    myOnPassSelected.onPassSelected(v, getImagesFile().listFiles()[getAdapterPosition()], isFirst, countSelected, itemView.findViewById(R.id.imageViewItem));
                 }
             }
+            notifyDataSetChanged();
         }
 
         @Override
@@ -148,7 +148,7 @@ public class MyPhotoAdapter extends RecyclerView.Adapter<MyPhotoAdapter.ViewHold
     }
 
     public interface OnPassSelected {
-        void onPassSelected(View v, File imageModel, Boolean isFirst, int count);
+        void onPassSelected(View v, File imageModel, Boolean isFirst, int count, View view);
     }
 
     public void setMyOnPassSelected(OnPassSelected myOnPassSelected) {

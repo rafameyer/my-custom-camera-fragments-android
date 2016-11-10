@@ -26,7 +26,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".view.Activity.MainActivity">
+        <activity android:name=".view.Activity.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

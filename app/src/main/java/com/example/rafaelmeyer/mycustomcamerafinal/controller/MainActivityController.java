@@ -29,41 +29,4 @@ public class MainActivityController  {
                     .commit();
         }
     }
-
-    public void startFragmentGallery(AppCompatActivity fragment) {
-        if (myFragmentGallery == null) {
-            if (myFragmentCamera != null) {
-                fragment.getSupportFragmentManager().beginTransaction()
-                        .remove(myFragmentCamera)
-                        .commit();
-                myFragmentCamera = null;
-            }
-            myFragmentGallery = new GalleryFragment();
-
-            fragment.getSupportFragmentManager().beginTransaction()
-                    .add(R.id.contentGallery, myFragmentGallery)
-                    .commit();
-        }
-    }
-
-    public boolean verifyIfCameraFragmentIsForeground() {
-        boolean aux = false;
-        if (myFragmentCamera != null) {
-            aux = true;
-        } else {
-            if (myFragmentCamera == null) {
-                aux = false;
-            }
-        }
-        return aux;
-    }
-
-    public boolean verifyIfGalleryFragmentIsForeground() {
-        if (myFragmentGallery != null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 }

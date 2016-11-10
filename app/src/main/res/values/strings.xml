@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Camera Custom</string>
+    <string name="transition_name">batatinha</string>
+    <string name="path_name">"/storage/emulated/0/Android/data/com.example.rafaelmeyer.mycustomcamerafinal/files/Pictures/"</string>
 </resources>

@@ -1,16 +1,21 @@
 package com.example.rafaelmeyer.mycustomcamerafinal.controller;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.example.rafaelmeyer.mycustomcamerafinal.R;
 import com.example.rafaelmeyer.mycustomcamerafinal.model.Item;
 import com.example.rafaelmeyer.mycustomcamerafinal.view.adapter.MyPhotoAdapter;
 import com.example.rafaelmeyer.mycustomcamerafinal.view.fragment.CameraFragment;
 import com.example.rafaelmeyer.mycustomcamerafinal.view.fragment.GalleryFragment;
+import com.example.rafaelmeyer.mycustomcamerafinal.view.fragment.PhotoFragment;
 
 import java.io.File;
 import java.util.List;
@@ -20,6 +25,7 @@ import java.util.List;
  */
 public class GalleryController {
 
+    private Fragment myPhotoFragment;
     private Fragment myCameraFragment;
     private MyPhotoAdapter myPhotoAdapter = new MyPhotoAdapter();
 
@@ -61,5 +67,19 @@ public class GalleryController {
         } else {
             return false;
         }
+    }
+
+    public void startPhotoFragmentFromGalleryFragment(AppCompatActivity activity, File imageFile, View v) {
+        Bundle bundle = new Bundle();
+        bundle.putString("jiripoca", imageFile.toURI().toString());
+
+        myPhotoFragment = new PhotoFragment();
+        myPhotoFragment.setArguments(bundle);
+
+        activity.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.contentGallery, myPhotoFragment, "PhotoFragment")
+                .addToBackStack("PhotoFragment")
+                //.addSharedElement(v.findViewById(R.id.imageViewItem), activity.getString(R.string.transition_name))
+                .commit();
     }
 }

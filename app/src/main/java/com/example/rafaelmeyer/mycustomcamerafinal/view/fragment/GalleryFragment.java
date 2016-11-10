@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,8 +43,6 @@ public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFi
 
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private FragmentManager myFragmentManager;
-
     private TextView textViewNoHaveItem;
     private TextView textViewTitleToolbar;
     private ImageView imageViewDeleteToolbar;
@@ -74,7 +71,7 @@ public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_gallery, container, false);
+        View view = inflater.inflate(R.layout.fragment_gallery, container, false);
 
         textViewNoHaveItem = (TextView) view.findViewById(R.id.textViewNoHaveItem);
         textViewTitleToolbar = (TextView) view.findViewById(R.id.textViewTitleToolbar);
@@ -184,53 +181,41 @@ public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFi
 
         if (count == 0) {
             textViewTitleToolbar.setText("Gallery");
-            imageViewDeleteToolbar.setVisibility(View.INVISIBLE);
-            imageViewUnselectedToolbar.setVisibility(View.INVISIBLE);
-        }
-        if (count > 0) {
-            textViewTitleToolbar.setText(countSelected + " Selected");
         }
 
-        if (isFirstActivity) {
-            imageViewDeleteToolbar.setVisibility(View.VISIBLE);
-            imageViewUnselectedToolbar.setVisibility(View.VISIBLE);
-        } else if (countSelected == 0) {
-            imageViewDeleteToolbar.setVisibility(View.INVISIBLE);
-            imageViewUnselectedToolbar.setVisibility(View.INVISIBLE);
-        }
-
-        if (itemList.size() == 0) {
-            textViewNoHaveItem.setVisibility(View.VISIBLE);
-        } else {
-            textViewNoHaveItem.setVisibility(View.INVISIBLE);
-        }
-
-        super.onResume();
+        setCustomToolbarItemSelected();
     }
 
     @Override
-    public void onPassSelected(View v, File imageModel, Boolean isFirst, int count) {
+    public void onPassSelected(View v, File imageModel, Boolean isFirst, int count, View view) {
         isFirstActivity = isFirst;
         countSelected = count;
 
         if (count == 0) {
             textViewTitleToolbar.setText("Gallery");
-        }
-
-        if (count > 0){
-            textViewTitleToolbar.setText(countSelected + " Selected");
+            imageViewDeleteToolbar.setVisibility(View.INVISIBLE);
+            imageViewUnselectedToolbar.setVisibility(View.INVISIBLE);
+            mAdapter.isFirst = false;
+            countSelected = count;
         }
 
         if (!isFirst && count == 0) {
-            //galleryCamera.startPhotoFragmentFromGalleryFragment(...);
+            galleryController.startPhotoFragmentFromGalleryFragment(activity, imageModel, view);
         }
 
-        if (isFirstActivity) {
-            //imageViewDeleteToolbar.setVisibility(View.VISIBLE);
-            //imageViewUnselectedToolbar.setVisibility(View.VISIBLE);
-        } else if (countSelected == 0) {
+        setCustomToolbarItemSelected();
+    }
+
+    private void setCustomToolbarItemSelected() {
+        if (countSelected > 0){
+            textViewTitleToolbar.setText(countSelected + " Selected");
+        }
+        if (countSelected == 0) {
             imageViewDeleteToolbar.setVisibility(View.INVISIBLE);
             imageViewUnselectedToolbar.setVisibility(View.INVISIBLE);
+        } else {
+            imageViewDeleteToolbar.setVisibility(View.VISIBLE);
+            imageViewUnselectedToolbar.setVisibility(View.VISIBLE);
         }
 
         if (itemList.size() == 0) {
@@ -238,7 +223,6 @@ public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFi
         } else {
             textViewNoHaveItem.setVisibility(View.INVISIBLE);
         }
-
         super.onResume();
     }
 
