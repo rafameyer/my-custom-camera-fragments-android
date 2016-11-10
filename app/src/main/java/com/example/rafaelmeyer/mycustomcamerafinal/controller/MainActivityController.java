@@ -47,14 +47,18 @@ public class MainActivityController  {
     }
 
     public boolean verifyIfCameraFragmentIsForeground() {
+        boolean aux = false;
         if (myFragmentCamera != null) {
-            return true;
+            aux = true;
         } else {
-            return false;
+            if (myFragmentCamera == null) {
+                aux = false;
+            }
         }
+        return aux;
     }
 
-    public boolean verifyIfCameraGalleryIsForeground() {
+    public boolean verifyIfGalleryFragmentIsForeground() {
         if (myFragmentGallery != null) {
             return true;
         } else {

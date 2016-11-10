@@ -30,7 +30,7 @@ public class CameraController {
 
         activity.getSupportFragmentManager().beginTransaction()
                 .addToBackStack("GalleryFragment")
-                .replace(R.id.contentCamera, myFragmentGallery)
+                .replace(R.id.contentCamera, myFragmentGallery, "GalleryFragment")
                 .commit();
     }
 

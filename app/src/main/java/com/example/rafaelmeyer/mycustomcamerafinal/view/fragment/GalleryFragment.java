@@ -28,7 +28,7 @@ import java.util.List;
  * Created by rafael.meyer on 11/4/16.
  */
 
-public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFirstSelected, MyPhotoAdapter.OnPassSelected, FragmentManager.OnBackStackChangedListener {
+public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFirstSelected, MyPhotoAdapter.OnPassSelected {
 
     private static final String TAG = "Gallery Fragment";
     private GalleryController galleryController = new GalleryController();
@@ -159,6 +159,7 @@ public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFi
         galleryController.removeItemSelected(mGalleryFolder.listFiles().length, itemList);
         countSelected = 0;
         mAdapter.isFirst = false;
+        mAdapter.setCountSelected(0);
         mAdapter.notifyDataSetChanged();
         imageViewUnselectedToolbar.setVisibility(View.INVISIBLE);
         imageViewDeleteToolbar.setVisibility(View.INVISIBLE);
@@ -169,6 +170,7 @@ public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFi
         galleryController.deleteAllItemSelected(mGalleryFolder.listFiles(), itemList);
         mAdapter.notifyDataSetChanged();
         mAdapter.isFirst = false;
+        mAdapter.setCountSelected(0);
         textViewTitleToolbar.setText("Gallery");
         imageViewDeleteToolbar.setVisibility(View.INVISIBLE);
         imageViewUnselectedToolbar.setVisibility(View.INVISIBLE);
@@ -182,6 +184,8 @@ public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFi
 
         if (count == 0) {
             textViewTitleToolbar.setText("Gallery");
+            imageViewDeleteToolbar.setVisibility(View.INVISIBLE);
+            imageViewUnselectedToolbar.setVisibility(View.INVISIBLE);
         }
         if (count > 0) {
             textViewTitleToolbar.setText(countSelected + " Selected");
@@ -211,9 +215,8 @@ public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFi
 
         if (count == 0) {
             textViewTitleToolbar.setText("Gallery");
-            imageViewDeleteToolbar.setVisibility(View.INVISIBLE);
-            imageViewUnselectedToolbar.setVisibility(View.INVISIBLE);
         }
+
         if (count > 0){
             textViewTitleToolbar.setText(countSelected + " Selected");
         }
@@ -223,8 +226,8 @@ public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFi
         }
 
         if (isFirstActivity) {
-            imageViewDeleteToolbar.setVisibility(View.VISIBLE);
-            imageViewUnselectedToolbar.setVisibility(View.VISIBLE);
+            //imageViewDeleteToolbar.setVisibility(View.VISIBLE);
+            //imageViewUnselectedToolbar.setVisibility(View.VISIBLE);
         } else if (countSelected == 0) {
             imageViewDeleteToolbar.setVisibility(View.INVISIBLE);
             imageViewUnselectedToolbar.setVisibility(View.INVISIBLE);
@@ -236,14 +239,7 @@ public class GalleryFragment extends Fragment implements MyPhotoAdapter.OnPassFi
             textViewNoHaveItem.setVisibility(View.INVISIBLE);
         }
 
-
-
         super.onResume();
     }
 
-    @Override
-    public void onBackStackChanged() {
-        // Its not working!!!!
-        getActivity().getSupportFragmentManager().popBackStack();
-    }
 }

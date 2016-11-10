@@ -26,7 +26,7 @@ public class GalleryController {
     public void startCameraFragmentFromGalleryFragment(AppCompatActivity activity, Fragment fragment) {
         myCameraFragment = new CameraFragment();
         activity.getSupportFragmentManager().beginTransaction()
-                .add(R.id.contentCamera, myCameraFragment)
+                .add(R.id.contentCamera, myCameraFragment, "CameraFragment")
                 .commit();
 
         activity.getSupportFragmentManager().beginTransaction()
@@ -55,4 +55,11 @@ public class GalleryController {
         }
     }
 
+    public boolean verifyIfGalleryIsForeground() {
+        if (myCameraFragment != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

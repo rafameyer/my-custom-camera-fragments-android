@@ -1,10 +1,14 @@
 package com.example.rafaelmeyer.mycustomcamerafinal.view.Activity;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.rafaelmeyer.mycustomcamerafinal.R;
+import com.example.rafaelmeyer.mycustomcamerafinal.controller.GalleryController;
 import com.example.rafaelmeyer.mycustomcamerafinal.controller.MainActivityController;
+import com.example.rafaelmeyer.mycustomcamerafinal.view.fragment.GalleryFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -12,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     public AppCompatActivity appCompatActivity;
     private MainActivityController mainActivityController = new MainActivityController();
+    private GalleryController galleryController = new GalleryController();
 
     @Override
     public void onResume() {
@@ -31,8 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mainActivityController.verifyIfCameraGalleryIsForeground()) {
-            mainActivityController.startFragmentCamera(this);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("GalleryFragment");
+        if (fragment != null) {
+            getSupportFragmentManager().popBackStack();
         } else {
             finish();
         }
